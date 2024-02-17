@@ -2,7 +2,6 @@ import localforage from "localforage";
 import { matchSorter } from "match-sorter";
 import { sortBy } from "sort-by-typescript";
 
-
 export type ContactType = {
   id: string;
   first?: string;
@@ -14,7 +13,7 @@ export type ContactType = {
   createdAt: number;
 };
 
-export async function getContacts(query: string | null = null) {
+export async function getContacts(query?: string) {
   await fakeNetwork(`getContacts:${query}`);
   let contacts: ContactType[] | null = await localforage.getItem("contacts");
   if (!contacts) contacts = [];
@@ -39,6 +38,7 @@ export async function getContact(id: string) {
   const contacts: ContactType[] | null = await localforage.getItem("contacts");
   const contact =
     contacts != null && contacts.find((contact) => contact.id === id);
+
   return contact ?? null;
 }
 

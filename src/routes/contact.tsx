@@ -1,24 +1,18 @@
-import { Form } from "react-router-dom";
-import { ContactType } from "../contacts";
+import { Form, useLoaderData } from "react-router-dom";
+import { ContactType, getContact } from "../contacts";
+
+export async function loader({ params }) {
+  const contact = await getContact(params.contactId);
+  return { contact };
+}
 
 export default function Contact() {
-  const contact = {
-    id: "",
-    first: "Your",
-    last: "Name",
-    avatar: "https://placekitten.com/g/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
-  };
+  const { contact } = useLoaderData() as { contact: ContactType };
 
   return (
     <div id="contact">
       <div>
-        <img
-          key={contact.avatar}
-          src={contact.avatar || ''}
-        />
+        <img key={contact.avatar} src={contact.avatar || ""} />
       </div>
 
       <div>
@@ -35,10 +29,7 @@ export default function Contact() {
 
         {contact.twitter && (
           <p>
-            <a
-              target="_blank"
-              href={`https://twitter.com/${contact.twitter}`}
-            >
+            <a target="_blank" href={`https://twitter.com/${contact.twitter}`}>
               {contact.twitter}
             </a>
           </p>
@@ -54,11 +45,7 @@ export default function Contact() {
             method="post"
             action="destroy"
             onSubmit={(event) => {
-              if (
-                !confirm(
-                  "Please confirm you want to delete this record."
-                )
-              ) {
+              if (!confirm("Please confirm you want to delete this record.")) {
                 event.preventDefault();
               }
             }}
@@ -71,7 +58,7 @@ export default function Contact() {
   );
 }
 
-function Favorite({ contact }: {contact: ContactType}) {
+function Favorite({ contact }: { contact: ContactType }) {
   // yes, this is a `let` for later
   let favorite = contact.favorite;
   return (
@@ -79,11 +66,7 @@ function Favorite({ contact }: {contact: ContactType}) {
       <button
         name="favorite"
         value={favorite ? "false" : "true"}
-        aria-label={
-          favorite
-            ? "Remove from favorites"
-            : "Add to favorites"
-        }
+        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
       >
         {favorite ? "★" : "☆"}
       </button>
