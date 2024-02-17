@@ -13,7 +13,7 @@ export type ContactType = {
   favorite: boolean;
 };
 
-export async function getContacts(query: string) {
+export async function getContacts(query: string | null = null) {
   await fakeNetwork(`getContacts:${query}`);
   let contacts: ContactType[] | null = await localforage.getItem("contacts");
   if (!contacts) contacts = [];
@@ -33,7 +33,7 @@ export async function createContact() {
   return contact;
 }
 
-export async function getContact(id) {
+export async function getContact(id: string) {
   await fakeNetwork(`contact:${id}`);
   const contacts: ContactType[] | null = await localforage.getItem("contacts");
   const contact =
@@ -71,7 +71,7 @@ function set(contacts: ContactType[]) {
 // fake a cache so we don't slow down stuff we've already seen
 let fakeCache = {};
 
-async function fakeNetwork(key) {
+async function fakeNetwork(key: string | null = null) {
   if (!key) {
     fakeCache = {};
   }
