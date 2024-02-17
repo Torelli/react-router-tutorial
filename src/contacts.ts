@@ -5,12 +5,13 @@ import { sortBy } from "sort-by-typescript";
 
 export type ContactType = {
   id: string;
-  first: string;
-  last: string;
-  avatar: string;
-  twitter: string;
-  notes: string;
-  favorite: boolean;
+  first?: string;
+  last?: string;
+  avatar?: string;
+  twitter?: string;
+  notes?: string;
+  favorite?: boolean;
+  createdAt: number;
 };
 
 export async function getContacts(query: string | null = null) {
